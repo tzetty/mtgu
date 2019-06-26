@@ -15,10 +15,36 @@ class Card:
 	}
 
 	RARITY_REMAPPER = {
-		'common': 'C',
-		'uncommon': 'U',
-		'rare': 'R',
-		'mythic': 'M'
+		'common': 'Com',
+		'uncommon': 'Unc',
+		'rare': 'Rare',
+		'mythic': 'Myth'
+	}
+
+	CARD_COLOR_REMAPPER = {
+		'' : '',
+		'U' : 'Blue',
+		'W' : 'White',
+		'G' : 'Green',
+		'R' : 'Red',
+		'B' : 'Black',
+		'B W' : 'Black/White',
+		'B U' : 'Black/Blue', 
+		'G U' : 'Green/Blue',
+		'B G' : 'Black/Green',
+		'G R' : 'Green/Red',
+		'R U' : 'Red/Blue',
+		'R W' : 'Red/White',
+		'G W' : 'Green/White',
+		'U W' : 'Blue/White',
+		'B R' : 'Black/Red',
+		'B R U' : 'Gold', 
+		'B G R' : 'Gold',
+		'G R W' : 'Gold', 
+		'B U W' : 'Gold', 
+		'G U W' : 'Gold',
+		'B G U' : 'Gold',
+		'B G R U W' : 'Gold',
 	}
 
 	SUBST_TABLE = {
@@ -37,6 +63,8 @@ class Card:
 		'{16}' : '16', '{17}' : '17', '{18}' : '18', '{19}' : '19',
 		'{20}' : '20', '{21}' : '21', '{22}' : '22', '{23}' : '23',
 	}
+
+	TYPE_DASH = chr(8212)
 
 	def __init__(self, dd):
 		assert dd['object'] == 'card'
@@ -100,20 +128,39 @@ class Card:
 			return card.dict['toughness']
 		return ''
 
+	@staticmethod
+	def get_split_types(card):
+		# special case lands and planeswalkers
+		if 'type_line' in card.dict:
+			tl = card.dict['type_line']
+			return [x.strip() for x in tl.split(Card.TYPE_DASH)]
+		return []
+
+	@staticmethod
+	def get_type(card):
+		types = Card.get_split_types(card)
+		if len(types) >= 1:
+			return types[0]
+		return ''
+
+	@staticmethod
+	def get_subtypes(card):
+		types = Card.get_split_types(card)
+		if len(types) == 2:
+			return types[1]
+		return ''
 
 RowDef = zmisc.RowDef(
 	zmisc.DictColDef.mode_str('set_name', 'set', remapper=Card.SET_REMAPPER),
-	zmisc.DictColDef.mode_str('long_set_name', 'set_name'),
 	zmisc.DictColDef.mode_int('number', 'collector_number'),
-	zmisc.GetterColDef('card_color', Card.get_card_color),
+	zmisc.GetterColDef('card_color', Card.get_card_color, remapper=Card.CARD_COLOR_REMAPPER),
 	zmisc.DictColDef.mode_str('rarity', 'rarity', remapper=Card.RARITY_REMAPPER),
 	zmisc.DictColDef.mode_str('card_name', 'name'),
-	zmisc.DictColDef.mode_str('card_type', 'type_line'),
+	zmisc.GetterColDef('card_type', Card.get_type),
+	zmisc.GetterColDef('card_type', Card.get_subtypes),
 	zmisc.GetterColDef('power', Card.get_power),
 	zmisc.GetterColDef('toughness', Card.get_toughness),
-	#zmisc.GetterColDef('mana', Card.get_mana_cost),
 	zmisc.DictColDef.mode_str('mana_mix', 'mana_cost', subst_table=Card.SUBST_TABLE),
-	#zmisc.GetterColDef('reprint_message', Card.get_reprint_message),
 	zmisc.DictColDef.mode_str('card_text', 'oracle_text', encoding='ascii', encoding_mode='ignore', subst_table=Card.SUBST_TABLE),
 )
 
