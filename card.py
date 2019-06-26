@@ -113,7 +113,7 @@ RowDef = zmisc.RowDef(
 	zmisc.GetterColDef('toughness', Card.get_toughness),
 	#zmisc.GetterColDef('mana', Card.get_mana_cost),
 	zmisc.DictColDef.mode_str('mana_mix', 'mana_cost', subst_table=Card.SUBST_TABLE),
-	zmisc.GetterColDef('reprint_message', Card.get_reprint_message),
-	zmisc.DictColDef.mode_str('card_text', 'oracle_text', encoding='utf-8', subst_table=Card.SUBST_TABLE),
+	#zmisc.GetterColDef('reprint_message', Card.get_reprint_message),
+	zmisc.DictColDef.mode_str('card_text', 'oracle_text', encoding='ascii', encoding_mode='ignore', subst_table=Card.SUBST_TABLE),
 )
 

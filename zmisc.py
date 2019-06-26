@@ -46,10 +46,12 @@ class ColDef:
 
         if 'encoding' in self.kwargs:
             # https://docs.python.org/3/howto/unicode.html
-            if 'encoding-mode' in self.kwargs:
-                value = str(value).encode(self.kwargs['encoding'], self.kwargs['encoding-mode'])
+            if 'encoding_mode' in self.kwargs:
+                value = str(value).encode(self.kwargs['encoding'], self.kwargs['encoding_mode'])
             else:
                 value = str(value).encode(self.kwargs['encoding'])
+
+            value = value.decode('ascii')
 
         return value
 
