@@ -4,6 +4,7 @@ cards.json
 arena.txt
 *.sublime-project
 *.sublime-workspace
+*inv.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
