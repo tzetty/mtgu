@@ -29,7 +29,7 @@ class Card:
 		'R' : 'Red',
 		'B' : 'Black',
 		'B W' : 'Black/White',
-		'B U' : 'Black/Blue', 
+		'B U' : 'Black/Blue',
 		'G U' : 'Green/Blue',
 		'B G' : 'Black/Green',
 		'G R' : 'Green/Red',
@@ -38,10 +38,10 @@ class Card:
 		'G W' : 'Green/White',
 		'U W' : 'Blue/White',
 		'B R' : 'Black/Red',
-		'B R U' : 'Gold', 
+		'B R U' : 'Gold',
 		'B G R' : 'Gold',
-		'G R W' : 'Gold', 
-		'B U W' : 'Gold', 
+		'G R W' : 'Gold',
+		'B U W' : 'Gold',
 		'G U W' : 'Gold',
 		'B G U' : 'Gold',
 		'B G R U W' : 'Gold',
@@ -64,9 +64,15 @@ class Card:
 		'{20}' : '20', '{21}' : '21', '{22}' : '22', '{23}' : '23',
 	}
 
+	SETS = [
+        'war', 'rna', 'grn', 'm19', 'dom', 'rix', 'xln',
+    ]
+
 	TYPE_DASH = chr(8212)
 
 	def __init__(self, dd):
+		#print(type(dd))
+		#print(dd)
 		assert dd['object'] == 'card'
 		self.dict = dd
 
@@ -78,6 +84,13 @@ class Card:
 
 	def has_valid_number(self):
 		return self.is_all_digits(self.dict['collector_number'])
+
+	@staticmethod
+	def is_valid(card):
+		if Card.get_set_abbv(card) in Card.SETS:
+			if card.has_valid_number():
+				return True
+		return False
 
 	@staticmethod
 	def is_all_digits(ss):
@@ -163,4 +176,3 @@ RowDef = zmisc.RowDef(
 	zmisc.DictColDef.mode_str('mana_mix', 'mana_cost', subst_table=Card.SUBST_TABLE),
 	zmisc.DictColDef.mode_str('card_text', 'oracle_text', encoding='ascii', encoding_mode='ignore', subst_table=Card.SUBST_TABLE),
 )
-

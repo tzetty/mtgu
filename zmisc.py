@@ -88,6 +88,41 @@ class RowDef:
         values = [col_def.to_csv_value(obj) for col_def in self.col_defs]
         return ','.join(values)
 
+def read_text_lines(text_filename):
+    txt = read_file(text_filename)
+    return [x.strip() for x in txt.split('\n') if len(x) > 0]
+
+class RowDb:
+    def __init__(self, raw_rows, row_class):
+        self.row_class = row_class
+        self.rows = []
+
+        for ndx in range(len(raw_rows)):
+            raw = raw_rows[ndx]
+            #print('NDX %d of %d, ROW type %s: %s' % (ndx, len(jj), type(row), row))
+            row = self.row_class(raw)
+            if self.row_class.is_valid(row):
+                self.rows.append(row)
+
+    def print_rows(self, to_str_fn):
+        for row in self.rows:
+            print('%s' % (to_str_fn(row)))
+
+class Args:
+    def __init__(self, args):
+        self.args = args
+        self.ndx = 0
+        self.arg_count = len(args)
+
+    def is_empty(self):
+        return self.ndx >= self.arg_count
+
+    def get_next(self):
+        assert self.ndx < self.arg_count
+        result = self.args[self.ndx]
+        self.ndx += 1
+        return result
+
 def scramble(seq):
     dup = [x for x in seq]
     result = []

@@ -13,10 +13,6 @@ class DeckLine:
 	def __str__(self):
 		return '%d %s (%s) %d' % (self.inv, self.card_name, self.set_name, self.num)
 
-	@staticmethod
-	def num_sort(lhs, rhs):
-		return lhs.num < rhs.num
-
 def main(args):
 	txt = zmisc.read_file(args[0])
 	lines = [x.strip() for x in txt.split('\n') if len(x) > 0]
