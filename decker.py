@@ -15,10 +15,6 @@ class DeckLine:
 	def __str__(self):
 		return '%d %s (%s) %d' % (self.inv, self.card_name, self.set_name, self.num)
 
-	@staticmethod
-	def is_valid(deck_item):
-		return True
-
 class Decker:
 	def __init__(self, args):
 		self.args = zmisc.Args(args)

@@ -97,11 +97,15 @@ class RowDb:
         self.row_class = row_class
         self.rows = []
 
+        is_valid = lambda x: True
+        if hasattr(row_class, 'is_valid'):
+            is_valid = getattr(row_class, 'is_valid')
+
+
         for ndx in range(len(raw_rows)):
             raw = raw_rows[ndx]
-            #print('NDX %d of %d, ROW type %s: %s' % (ndx, len(jj), type(row), row))
             row = self.row_class(raw)
-            if self.row_class.is_valid(row):
+            if is_valid(row):
                 self.rows.append(row)
 
     def print_rows(self, to_str_fn):
