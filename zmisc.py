@@ -109,8 +109,20 @@ class RowDb:
                 self.rows.append(row)
 
     def print_rows(self, to_str_fn):
+        self.each(lambda x: print(to_str_fn(x)))
+
+    def sort(self, **kwargs):
+        self.rows.sort(**kwargs)
+
+    def each(self, fn):
         for row in self.rows:
-            print('%s' % (to_str_fn(row)))
+            fn(row)
+
+    def find(self, fn):
+        for row in self.rows:
+            if fn(row) == True:
+                return row
+        return None
 
 class Args:
     def __init__(self, args):
